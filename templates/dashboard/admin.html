@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="jumbotron text-center bg-primary text-white">
+        <h1>Admin Dashboard</h1>
+        <p>Manage books, users, and more</p>
+        
+    </div>
+    <div style="display:flex; justify-content: space-between;">
+        <form method="post" action="{% url 'search' %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" name="search" class="form-control" placeholder="Search by Student ID" aria-label="Search by Student ID" aria-describedby="search-button">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-info" type="submit" id="search-button">Search</button>
+                </div>
+            </div>
+        </form>        
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% url 'change_password' %}" class="btn btn-warning">Change Password</a>
+        </div>
+    </div>
+</div>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h4 class="card-title">Total Books</h4>
+                    <p class="display-4">{{ all_books.count }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-warning">
+                <div class="card-body">
+                    <h4 class="card-title">Borrowed Books</h4>
+                    <p class="display-4">{{ borrowed_books.count }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h4 class="card-title">Total Users</h4>
+                    <p class="display-4">{{ all_users.count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white" style="display: flex;justify-content: space-between;">
+                    <span>
+                    All Books
+                </span>
+                    <a class="btn btn-success btn-block" href="{% url 'add_book' %}">+ Add New Book</a>                
+
+                </div>
+                
+                <ul class="list-group list-group-flush">
+                    {% for book in all_books %}
+                    <li class="list-group-item" style="display: flex;justify-content: space-between;">
+                        <div class="mr-auto" style="display: inline-block; position: relative;">
+                        {{ book.title }} by {{ book.author }}
+                    </div>
+                        <div class="ml-auto" style="display: inline-block; position: relative;">
+                        <a href="{% url 'book_detail' book.id %}" class="btn btn-primary btn-sm float-right ml-2">View</a>
+                        <a href="{% url 'edit_book' book.id %}" class="btn btn-warning btn-sm float-right ml-2">Edit</a>
+                        <a href="{% url 'delete_book' book.id %}" class="btn btn-danger btn-sm float-right ml-2">Delete</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    Borrowed Books
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for book in borrowed_books %}
+                    <li class="list-group-item">{{ book.title }} by {{ book.borrowed_by }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    All Users
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for user in all_users %}
+                    <li class="list-group-item" style="display: flex; justify-content: space-between;">
+                        <span>
+                        {{ user.username }}
+                    </span>
+                        <a href="{% url 'view_student' user.id %}" class="btn btn-primary btn-sm float-right ml-2">Details</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        </div>
+  
+    
+    </div>
+</div>
+{% endblock %}

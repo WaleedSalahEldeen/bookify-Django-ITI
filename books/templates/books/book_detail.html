@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ book.title }}{% endblock%}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-md-8">
+            <h2 class="mb-3">{{ book.title }}</h2>
+            <h4 class="text-muted">{{ book.author }}</h4>
+            <hr>
+            <p><strong>Genre:</strong> {{ book.genre }}</p>
+            <p><strong>Summary:</strong> {{ book.summary }}</p>
+            
+            {% if book.is_available %}
+            <form method="post" action="{% url 'borrow_book' book.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-lg">Borrow</button>
+            </form>
+            {% elif book.borrowed_by == request.user %}
+            <form method="post" action="{% url 'return_book' book.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg">Return</button>
+            </form>
+            {% else %}
+            <button class="btn btn-warning btn-lg" disabled>Currently Borrowed</button>
+
+            {% endif %}
+                        
+        </div>
+    </div>
+</div>
+{% endblock %}

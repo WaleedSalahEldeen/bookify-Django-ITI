@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Welcome, {{ request.user.username }}!</h1>
+    <a href="{% url 'update_profile' %}" class="btn btn-primary mt-3">Update Profile</a>
+
+    <h3 class="mt-4">Your Borrowed Books:</h3>
+    <ul class="list-group" >
+        {% for book in student_books %}
+        <li class="list-group-item" style="display: flex;
+        justify-content: space-between;">
+            {{ book.title }} by {{ book.author }}
+            <br>
+            <small class="text-muted">Return Date: {{ book.return_date }}</small>
+            <form method="post" action="{% url 'return_book' book.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning btn-sm">Return Books</button>
+            </form>
+        </li>
+        {% empty %}
+        <li class="list-group-item">You haven't borrowed any books yet.</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endblock %}

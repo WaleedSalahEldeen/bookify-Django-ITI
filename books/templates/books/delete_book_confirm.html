@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block title %}Delete Book{% endblock %}
+{% block content %}
+<p>Are you sure you want to delete the book "{{ book.title }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+</form>
+{% endblock %}

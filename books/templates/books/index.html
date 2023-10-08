@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% load bootstrap %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">All Books</h2>
+    
+    <div class="row">
+        {% for book in books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="card-img-top" style="object-fit: cover; height: 400px;">
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                    {% if book.genre %}
+                    <p class="card-text"><strong>Genre:</strong> {{ book.genre }}</p>
+                    {% endif %}
+                    <p class="card-text">{{ book.summary}}</p>
+                </div>
+                <div class="card-footer" style="display: flex;justify-content: space-between;">
+                    <small class="text-muted">
+                        {% if book.availability_status %}
+                        Available
+                        {% else %}
+                        Borrowed by {{ book.borrowed_by.username }} on {{ book.borrow_date }}
+                        {% endif %}
+                    </small>
+                    <a href="{% url 'book_detail' book.id %}" class="btn btn-primary btn-sm float-right ml-2">View</a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
